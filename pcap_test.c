@@ -64,22 +64,22 @@ void packet_view(unsigned char *user, const struct pcap_pkthdr *h, const unsigne
 	p += sizeof(struct ether_header);
         iph = (struct ip *) p;
 
-	if( iph->ip_p == IPPROTO_TCP) { 
+	if( iph->ip_p == IPPROTO_TCP) {//ip protocol is TCP 
 
 	  printf("PROTOCOL: tcp \n");
 	  printf("------------------------------------------------------------------------\n");
-          printf("IP \n");
+          printf("IP \n");//source ip & destination ip
           p += sizeof(struct ether_header);                         
           printf("SRC IP= %s\n", inet_ntoa(iph->ip_src));
           printf("DST IP= %s\n", inet_ntoa(iph->ip_dst));
           printf("IP Version = %d\n", iph->ip_v);
 	  printf("------------------------------------------------------------------------\n");
-	  printf("MAP\n");
+	  printf("MAP\n");//smap & dmap
 	  ep = (struct ether_header *) p;
 	  printf("SRC MAP= %x-%x-%x-%x-%x-%x\n",ep->ether_shost[0],ep->ether_shost[1],ep->ether_shost[2],ep->ether_shost[3],ep->ether_shost[4],ep->ether_shost[5]);
 	  printf("DST MAP= %x-%x-%x-%x-%x-%x\n",ep->ether_dhost[0],ep->ether_dhost[1],ep->ether_dhost[2],ep->ether_dhost[3],ep->ether_dhost[4],ep->ether_dhost[5]);
           printf("------------------------------------------------------------------------\n");
-          printf("PORT\n");
+          printf("PORT\n");//source port & destination port
        	  tcph = (struct tcp *)(p + iph->ip_hl * 4);
 	  printf("Src Port : %d\n" , ntohs(tcph->source));
           printf("Dst Port : %d\n" , ntohs(tcph->dest));
