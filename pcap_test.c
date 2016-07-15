@@ -40,24 +40,21 @@ int main(int argc, char *argv[]) {
         
          pd = pcap_open_live(dev, PCAP_SNAPSHOT, 1, PCAP_TIMEOUT, errbuf); 
         
-         pcap_loop(pd, 0, packet_view, 0); 
+         pcap_loop(pd, -1, packet_view, 0); 
                 
          return 1;
  }
 void packet_view(unsigned char *user, const struct pcap_pkthdr *h, const unsigned char *p)
  {
-      int len;
-        
-      len = 0;
-        
+      //when I wrote this, I want to express the number of packet. but I forgot.
       struct ip *iph;
       struct ether_header *ep;
       struct tcphdr *tcph;
       unsigned short e_type;
-
-
+      
       ep = (struct ether_header *)p;
-      e_type = ntohs(ep->ether_type);                         
+      e_type = ntohs(ep->ether_type);    
+                     
 
       if( e_type ==  ETHERTYPE_IP ){
 	printf("////////////////////////////////////////////////////////////////////////////////\n");
@@ -69,13 +66,11 @@ void packet_view(unsigned char *user, const struct pcap_pkthdr *h, const unsigne
 	  printf("PROTOCOL: tcp \n");
 	  printf("------------------------------------------------------------------------\n");
           printf("IP \n");//source ip & destination ip
-          p += sizeof(struct ether_header);                         
           printf("SRC IP= %s\n", inet_ntoa(iph->ip_src));
           printf("DST IP= %s\n", inet_ntoa(iph->ip_dst));
           printf("IP Version = %d\n", iph->ip_v);
 	  printf("------------------------------------------------------------------------\n");
 	  printf("MAP\n");//smap & dmap
-	  ep = (struct ether_header *) p;
 	  printf("SRC MAP= %x-%x-%x-%x-%x-%x\n",ep->ether_shost[0],ep->ether_shost[1],ep->ether_shost[2],ep->ether_shost[3],ep->ether_shost[4],ep->ether_shost[5]);
 	  printf("DST MAP= %x-%x-%x-%x-%x-%x\n",ep->ether_dhost[0],ep->ether_dhost[1],ep->ether_dhost[2],ep->ether_dhost[3],ep->ether_dhost[4],ep->ether_dhost[5]);
           printf("------------------------------------------------------------------------\n");
